@@ -135,4 +135,3 @@ const handleDelete = () => {
   }
 }
 </style>
-</template>
