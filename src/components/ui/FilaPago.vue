@@ -151,4 +151,3 @@ const handleDelete = (payment) => {
   color: var(--primary-coral) !important;
 }
 </style>
-</template>
