@@ -21,9 +21,7 @@
       <span class="fw-bold text-success">${{ pago.amount.toLocaleString() }}</span>
     </td>
     <td>
-      <span :class="getStatusBadgeClass(pago.status)">
-        {{ pago.status }}
-      </span>
+      <PaymentStatusBadge :status="pago.status" />
     </td>
     <td>{{ formatDate(pago.date) }}</td>
     <td>
@@ -38,36 +36,26 @@
       </div>
     </td>
     <td>
-      <div class="btn-group btn-group-sm">
-        <BotonPrimario
-          variant="outline-primary"
-          size="sm"
-          icon="bi bi-eye"
-          @click="handleView"
-          title="Ver detalles"
-        />
-        <BotonPrimario
-          variant="outline-secondary"
-          size="sm"
-          icon="bi bi-pencil"
-          @click="handleEdit"
-          title="Editar"
-        />
-        <BotonPrimario
-          v-if="showDelete"
-          variant="outline-danger"
-          size="sm"
-          icon="bi bi-trash"
-          @click="handleDelete"
-          title="Eliminar"
-        />
-      </div>
+      <PaymentActionButtons
+        :payment="pago"
+        :show-liquidar="showLiquidar"
+        :show-abonar="showAbonar"
+        :show-view="showView"
+        :show-edit="showEdit"
+        :show-delete="showDelete"
+        @liquidar="handleLiquidar"
+        @abonar="handleAbonar"
+        @view="handleView"
+        @edit="handleEdit"
+        @delete="handleDelete"
+      />
     </td>
   </tr>
 </template>
 
 <script setup>
-import BotonPrimario from './BotonPrimario.vue'
+import PaymentStatusBadge from './PaymentStatusBadge.vue'
+import PaymentActionButtons from './PaymentActionButtons.vue'
 
 const props = defineProps({
   pago: {
@@ -78,28 +66,29 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  showLiquidar: {
+    type: Boolean,
+    default: true
+  },
+  showAbonar: {
+    type: Boolean,
+    default: true
+  },
+  showView: {
+    type: Boolean,
+    default: true
+  },
+  showEdit: {
+    type: Boolean,
+    default: true
+  },
   showDelete: {
     type: Boolean,
     default: false
   }
 })
 
-const emit = defineEmits(['view', 'edit', 'delete'])
-
-const getStatusBadgeClass = (status) => {
-  const baseClasses = 'badge rounded-pill'
-  switch (status) {
-    case 'Pagado':
-    case 'Liquidado':
-      return `${baseClasses} bg-success`
-    case 'Pendiente':
-      return `${baseClasses} bg-danger`
-    case 'Abono':
-      return `${baseClasses} bg-warning`
-    default:
-      return baseClasses
-  }
-}
+const emit = defineEmits(['liquidar', 'abonar', 'view', 'edit', 'delete'])
 
 const formatDate = (dateString) => {
   const date = new Date(dateString)
@@ -111,16 +100,24 @@ const truncateText = (text, maxLength) => {
   return text.length > maxLength ? text.substring(0, maxLength) + '...' : text
 }
 
-const handleView = () => {
-  emit('view', props.pago)
+const handleLiquidar = (payment) => {
+  emit('liquidar', payment)
 }
 
-const handleEdit = () => {
-  emit('edit', props.pago)
+const handleAbonar = (payment) => {
+  emit('abonar', payment)
 }
 
-const handleDelete = () => {
-  emit('delete', props.pago)
+const handleView = (payment) => {
+  emit('view', payment)
+}
+
+const handleEdit = (payment) => {
+  emit('edit', payment)
+}
+
+const handleDelete = (payment) => {
+  emit('delete', payment)
 }
 </script>
 
@@ -148,11 +145,6 @@ const handleDelete = () => {
 .notes-cell {
   max-width: 150px;
   overflow: hidden;
-}
-
-.btn-group-sm .btn {
-  padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
 }
 
 .text-coral {

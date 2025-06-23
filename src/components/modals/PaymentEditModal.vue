@@ -12,7 +12,7 @@
 
         <div class="modal-body">
           <form @submit.prevent="handleSubmit">
-            <!-- Información del pago -->
+            <!-- Información del Pago -->
             <div class="info-section mb-4">
               <h6 class="section-title">
                 <i class="bi bi-info-circle me-2"></i>
@@ -42,7 +42,7 @@
               </div>
             </div>
 
-            <!-- Información del cliente -->
+            <!-- Información del Cliente -->
             <div class="info-section mb-4">
               <h6 class="section-title">
                 <i class="bi bi-person-circle me-2"></i>
@@ -76,31 +76,94 @@
               </div>
             </div>
 
-            <!-- Detalles del servicio -->
+            <!-- Detalles del Servicio -->
             <div class="info-section mb-4">
               <h6 class="section-title">
                 <i class="bi bi-box me-2"></i>
                 Detalles del Servicio
               </h6>
               <div class="service-card">
-                <div class="mb-3">
-                  <label class="form-label">Plan/Servicio</label>
-                  <select class="form-select" v-model="editForm.planName" @change="updateServicePrice">
-                    <option value="">Seleccionar plan o servicio</option>
-                    <option value="Plan Huevo">Plan Huevo - $15,000</option>
-                    <option value="Plan Ajolote">Plan Ajolote - $25,000</option>
-                    <option value="Plan Alebrije">Plan Alebrije - Personalizado</option>
-                    <option value="Desarrollo de Ecommerce">Desarrollo de Ecommerce - $8,000</option>
-                    <option value="Email Marketing">Email Marketing - $5,000</option>
-                    <option value="Marketing Digital">Marketing Digital - $8,000</option>
-                    <option value="Diseño UI/UX">Diseño UI/UX - $8,000</option>
-                    <option value="Automatización">Automatización - $8,000</option>
-                  </select>
+                <div class="service-type-tabs mb-3">
+                  <button 
+                    type="button"
+                    class="btn"
+                    :class="serviceType === 'predefined' ? 'btn-primary' : 'btn-outline-primary'"
+                    @click="serviceType = 'predefined'"
+                  >
+                    <i class="bi bi-list-ul me-2"></i>
+                    Predefinido
+                  </button>
+                  <button 
+                    type="button"
+                    class="btn ms-2"
+                    :class="serviceType === 'custom' ? 'btn-primary' : 'btn-outline-primary'"
+                    @click="serviceType = 'custom'"
+                  >
+                    <i class="bi bi-gear me-2"></i>
+                    Personalizado
+                  </button>
+                </div>
+
+                <!-- Predefinido -->
+                <div v-if="serviceType === 'predefined'">
+                  <div class="mb-3">
+                    <label class="form-label">Plan/Servicio</label>
+                    <select class="form-select" v-model="editForm.selectedService" @change="updateServicePrice">
+                      <option value="">Seleccionar plan o servicio</option>
+                      <optgroup label="Planes">
+                        <option 
+                          v-for="plan in planes" 
+                          :key="'plan-' + plan.id" 
+                          :value="{ type: 'plan', ...plan }"
+                        >
+                          {{ plan.nombre }} - ${{ plan.precio.toLocaleString() }}
+                        </option>
+                      </optgroup>
+                      <optgroup label="Servicios">
+                        <option 
+                          v-for="servicio in servicios" 
+                          :key="'service-' + servicio.id" 
+                          :value="{ type: 'service', ...servicio }"
+                        >
+                          {{ servicio.nombre }} - ${{ servicio.precio.toLocaleString() }}
+                        </option>
+                      </optgroup>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Personalizado -->
+                <div v-if="serviceType === 'custom'">
+                  <div class="mb-3">
+                    <label class="form-label">Servicios Seleccionados</label>
+                    <div class="selected-services mb-2">
+                      <span 
+                        v-for="service in selectedServices" 
+                        :key="service.id"
+                        class="badge bg-primary me-2 mb-2"
+                      >
+                        {{ service.nombre }} - ${{ service.precio.toLocaleString() }}
+                        <button 
+                          type="button" 
+                          class="btn-close btn-close-white ms-2" 
+                          @click="removeService(service)"
+                        ></button>
+                      </span>
+                    </div>
+                    <button 
+                      type="button" 
+                      class="btn btn-outline-primary btn-sm" 
+                      @click="showServiceSelector = true"
+                    >
+                      <i class="bi bi-plus me-1"></i>
+                      Agregar Servicio
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <!-- Información de pago -->
+            <!-- Información de Pago -->
             <div class="info-section mb-4">
               <h6 class="section-title">
                 <i class="bi bi-currency-dollar me-2"></i>
@@ -145,7 +208,7 @@
               </div>
             </div>
 
-            <!-- Notas adicionales -->
+            <!-- Notas Adicionales -->
             <div class="info-section mb-4">
               <h6 class="section-title">
                 <i class="bi bi-chat-text me-2"></i>
@@ -160,18 +223,66 @@
                 ></textarea>
               </div>
             </div>
+
+            <div class="d-flex justify-content-end gap-2">
+              <button type="button" class="btn btn-outline-secondary" @click="$emit('close')">
+                <i class="bi bi-x-circle me-1"></i>
+                Cancelar
+              </button>
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-check-circle me-1"></i>
+                Guardar Cambios
+              </button>
+            </div>
           </form>
         </div>
+      </div>
+    </div>
 
-        <div class="modal-footer border-0 pt-0">
-          <button type="button" class="btn btn-outline-secondary me-2" @click="$emit('close')">
-            <i class="bi bi-x-circle me-1"></i>
-            Cancelar
-          </button>
-          <button type="button" class="btn btn-primary" @click="handleSubmit">
-            <i class="bi bi-check-circle me-1"></i>
-            Guardar Cambios
-          </button>
+    <!-- Service Selector Modal -->
+    <div class="modal fade" v-if="showServiceSelector" style="display: block;">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Seleccionar Servicios</h5>
+            <button type="button" class="btn-close" @click="showServiceSelector = false"></button>
+          </div>
+          <div class="modal-body">
+            <h6>Planes</h6>
+            <div class="list-group mb-3">
+              <button 
+                v-for="plan in planes" 
+                :key="'modal-plan-' + plan.id"
+                type="button" 
+                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+                @click="addService({ type: 'plan', ...plan })"
+                :disabled="isServiceSelected({ type: 'plan', ...plan })"
+              >
+                <span>{{ plan.nombre }}</span>
+                <span class="badge bg-primary">${{ plan.precio.toLocaleString() }}</span>
+              </button>
+            </div>
+            
+            <h6>Servicios</h6>
+            <div class="list-group">
+              <button 
+                v-for="servicio in servicios" 
+                :key="'modal-service-' + servicio.id"
+                type="button" 
+                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+                @click="addService({ type: 'service', ...servicio })"
+                :disabled="isServiceSelected({ type: 'service', ...servicio })"
+              >
+                <span>{{ servicio.nombre }}</span>
+                <span class="badge bg-primary">${{ servicio.precio.toLocaleString() }}</span>
+              </button>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" @click="showServiceSelector = false">
+              Cerrar
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -180,39 +291,33 @@
 </template>
 
 <script setup>
-import { ref, watch, defineProps, defineEmits } from 'vue';
+import { ref, watch } from 'vue'
 
 const props = defineProps({
   show: Boolean,
   payment: Object,
-  companies: Array
-});
+  companies: Array,
+  planes: Array,
+  servicios: Array
+})
 
-const emit = defineEmits(['close', 'save']);
+const emit = defineEmits(['close', 'save'])
+
+const serviceType = ref('predefined')
+const showServiceSelector = ref(false)
+const selectedServices = ref([])
 
 const editForm = ref({
   id: null,
   purchaseId: '',
   userName: '',
   companyId: null,
-  planName: '',
+  selectedService: null,
   amount: 0,
   status: 'Pendiente',
   date: '',
   notes: ''
-});
-
-// Precios predefinidos
-const predefinedPrices = {
-  'Plan Huevo': 15000,
-  'Plan Ajolote': 25000,
-  'Plan Alebrije': 0, // Personalizado
-  'Desarrollo de Ecommerce': 8000,
-  'Email Marketing': 5000,
-  'Marketing Digital': 8000,
-  'Diseño UI/UX': 8000,
-  'Automatización': 8000
-};
+})
 
 // Watch para cargar datos del pago cuando se abre el modal
 watch(() => props.payment, (newPayment) => {
@@ -222,62 +327,144 @@ watch(() => props.payment, (newPayment) => {
       purchaseId: newPayment.purchaseId,
       userName: newPayment.userName || '',
       companyId: newPayment.companyId,
-      planName: newPayment.planName,
+      selectedService: null,
       amount: newPayment.amount,
       status: newPayment.status,
       date: newPayment.date,
       notes: newPayment.notes || ''
-    };
+    }
+    
+    // Determinar si es servicio personalizado o predefinido
+    if (newPayment.services && newPayment.services.length > 1) {
+      serviceType.value = 'custom'
+      selectedServices.value = newPayment.services.map(serviceName => {
+        // Buscar en planes
+        const plan = props.planes.find(p => p.nombre === serviceName)
+        if (plan) return { type: 'plan', ...plan }
+        
+        // Buscar en servicios
+        const service = props.servicios.find(s => s.nombre === serviceName)
+        if (service) return { type: 'service', ...service }
+        
+        return null
+      }).filter(Boolean)
+    } else {
+      serviceType.value = 'predefined'
+      // Buscar el servicio/plan actual
+      const serviceName = newPayment.planName
+      const plan = props.planes.find(p => p.nombre === serviceName)
+      if (plan) {
+        editForm.value.selectedService = { type: 'plan', ...plan }
+      } else {
+        const service = props.servicios.find(s => s.nombre === serviceName)
+        if (service) {
+          editForm.value.selectedService = { type: 'service', ...service }
+        }
+      }
+    }
   }
-}, { immediate: true });
+}, { immediate: true })
 
 const updateServicePrice = () => {
-  const selectedPlan = editForm.value.planName;
-  if (selectedPlan && predefinedPrices[selectedPlan] !== undefined) {
-    editForm.value.amount = predefinedPrices[selectedPlan];
+  if (editForm.value.selectedService && editForm.value.selectedService.precio) {
+    editForm.value.amount = editForm.value.selectedService.precio
   }
-};
+}
+
+const addService = (service) => {
+  if (!isServiceSelected(service)) {
+    selectedServices.value.push(service)
+    updateCustomTotal()
+  }
+  showServiceSelector.value = false
+}
+
+const removeService = (service) => {
+  const index = selectedServices.value.findIndex(s => 
+    s.id === service.id && s.type === service.type
+  )
+  if (index > -1) {
+    selectedServices.value.splice(index, 1)
+    updateCustomTotal()
+  }
+}
+
+const isServiceSelected = (service) => {
+  return selectedServices.value.some(s => 
+    s.id === service.id && s.type === service.type
+  )
+}
+
+const updateCustomTotal = () => {
+  if (serviceType.value === 'custom') {
+    editForm.value.amount = selectedServices.value.reduce((total, service) => 
+      total + service.precio, 0
+    )
+  }
+}
+
+const getServiceName = () => {
+  if (serviceType.value === 'predefined' && editForm.value.selectedService) {
+    return editForm.value.selectedService.nombre
+  } else if (serviceType.value === 'custom' && selectedServices.value.length > 0) {
+    return selectedServices.value.map(s => s.nombre).join(' + ')
+  }
+  return ''
+}
 
 const getStatusBadgeClass = (status) => {
-  const baseClasses = 'badge rounded-pill';
+  const baseClasses = 'badge rounded-pill'
   switch (status) {
     case 'Pagado':
     case 'Liquidado':
-      return `${baseClasses} bg-success`;
+      return `${baseClasses} bg-success`
     case 'Pendiente':
-      return `${baseClasses} bg-danger`;
+      return `${baseClasses} bg-danger`
     case 'Abono':
-      return `${baseClasses} bg-warning`;
+      return `${baseClasses} bg-warning`
     default:
-      return baseClasses;
+      return baseClasses
   }
-};
+}
 
 const handleSubmit = () => {
   // Validaciones básicas
   if (!editForm.value.userName) {
-    alert('Por favor ingresa el nombre del usuario');
-    return;
+    alert('Por favor ingresa el nombre del usuario')
+    return
   }
 
-  if (!editForm.value.planName) {
-    alert('Por favor selecciona un plan o servicio');
-    return;
+  if (serviceType.value === 'predefined' && !editForm.value.selectedService) {
+    alert('Por favor selecciona un plan o servicio')
+    return
+  }
+
+  if (serviceType.value === 'custom' && selectedServices.value.length === 0) {
+    alert('Por favor selecciona al menos un servicio')
+    return
   }
 
   if (!editForm.value.amount || editForm.value.amount <= 0) {
-    alert('Por favor ingresa un monto válido');
-    return;
+    alert('Por favor ingresa un monto válido')
+    return
   }
 
   if (!editForm.value.companyId) {
-    alert('Por favor selecciona una empresa');
-    return;
+    alert('Por favor selecciona una empresa')
+    return
   }
 
   // Emitir los datos actualizados
-  emit('save', { ...editForm.value });
-};
+  const updatedPayment = {
+    ...editForm.value,
+    planName: getServiceName(),
+    services: serviceType.value === 'predefined' 
+      ? [editForm.value.selectedService.nombre]
+      : selectedServices.value.map(s => s.nombre)
+  }
+  
+  emit('save', updatedPayment)
+}
 </script>
 
 <style scoped>
@@ -313,6 +500,18 @@ const handleSubmit = () => {
   border-color: var(--primary-blue);
 }
 
+.service-type-tabs {
+  display: flex;
+  justify-content: center;
+}
+
+.selected-services {
+  min-height: 40px;
+  border: 1px dashed #dee2e6;
+  border-radius: 8px;
+  padding: 0.5rem;
+}
+
 .form-control:focus,
 .form-select:focus {
   border-color: var(--primary-coral);
@@ -339,6 +538,11 @@ const handleSubmit = () => {
   font-weight: 600;
 }
 
+.list-group-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 @media (max-width: 768px) {
   .modal-dialog {
     margin: 0.5rem;
@@ -348,6 +552,11 @@ const handleSubmit = () => {
   .payment-card,
   .service-card {
     padding: 1rem;
+  }
+  
+  .service-type-tabs {
+    flex-direction: column;
+    gap: 0.5rem;
   }
 }
 </style>
