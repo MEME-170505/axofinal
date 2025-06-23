@@ -1,14 +1,28 @@
+// ===== STORE DE AUTENTICACIÓN =====
+// Maneja el estado global de autenticación de usuarios
+
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
 export const useAuthStore = defineStore('auth', () => {
-  const user = ref(null)
+  // ===== ESTADO REACTIVO =====
+  const user = ref(null) // Información del usuario actual
+
+  // ===== COMPUTED PROPERTIES =====
+  // Verificar si hay un usuario autenticado
   const isAuthenticated = computed(() => !!user.value)
+  
+  // Verificar si el usuario es administrador
   const isAdmin = computed(() => user.value?.role === 'admin')
+  
+  // Verificar si el usuario es cliente
   const isClient = computed(() => user.value?.role === 'client')
 
+  // ===== FUNCIÓN DE LOGIN =====
   const login = (email, password) => {
-    // Credenciales de prueba
+    // CREDENCIALES DE PRUEBA - En producción esto se conectaría a una API
+    
+    // Cliente de prueba
     if (email === 'cliente@gmail.com' && password === 'cisco') {
       user.value = {
         id: 1,
@@ -19,7 +33,9 @@ export const useAuthStore = defineStore('auth', () => {
         phone: '123-456-7890'
       }
       return { success: true, user: user.value }
-    } else if (email === 'admin@gmail.com' && password === 'CISCO') {
+    } 
+    // Administrador de prueba
+    else if (email === 'admin@gmail.com' && password === 'CISCO') {
       user.value = {
         id: 2,
         name: 'Administrador',
@@ -27,15 +43,19 @@ export const useAuthStore = defineStore('auth', () => {
         role: 'admin'
       }
       return { success: true, user: user.value }
-    } else {
+    } 
+    // Credenciales incorrectas
+    else {
       return { success: false, message: 'Credenciales incorrectas' }
     }
   }
 
+  // ===== FUNCIÓN DE LOGOUT =====
   const logout = () => {
-    user.value = null
+    user.value = null // Limpiar datos del usuario
   }
 
+  // ===== EXPORTAR FUNCIONES Y ESTADO =====
   return {
     user,
     isAuthenticated,

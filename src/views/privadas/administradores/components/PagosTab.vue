@@ -1,7 +1,10 @@
 <template>
+  <!-- ===== VISTA PRINCIPAL DE GESTIÓN DE PAGOS ===== -->
   <div class="pagos-tab">
     <div class="pagos-layout">
-      <!-- Sidebar de Empresas -->
+      
+      <!-- ===== SIDEBAR DE EMPRESAS ===== -->
+      <!-- Panel lateral que muestra todas las empresas registradas -->
       <div class="empresas-sidebar">
         <div class="sidebar-header">
           <div class="d-flex align-items-center justify-content-between">
@@ -9,10 +12,12 @@
               <i class="bi bi-building me-2"></i>
               Empresas
             </h5>
+            <!-- Contador de empresas -->
             <span class="badge bg-light text-dark">{{ empresas.length }}</span>
           </div>
         </div>
         
+        <!-- Buscador de empresas -->
         <div class="search-container mb-3">
           <div class="input-group">
             <span class="input-group-text">
@@ -27,6 +32,7 @@
           </div>
         </div>
 
+        <!-- Lista de empresas -->
         <div class="empresas-list">
           <EmpresaItem
             v-for="empresa in empresasFiltradas"
@@ -44,18 +50,21 @@
         </div>
       </div>
 
-      <!-- Contenido Principal -->
+      <!-- ===== CONTENIDO PRINCIPAL - TABLA DE PAGOS ===== -->
       <div class="pagos-content">
+        <!-- Header con título y botón de crear -->
         <div class="content-header">
           <div class="d-flex align-items-center justify-content-between">
             <div>
               <h4 class="mb-1">
                 <i class="bi bi-clock-history me-2"></i>
                 Historial de Pagos
+                <!-- Mostrar empresa seleccionada -->
                 <span v-if="selectedEmpresa" class="text-light opacity-75">- {{ selectedEmpresa.name }}</span>
               </h4>
               <small class="text-light opacity-75">{{ pagosFiltrados.length }} registro(s)</small>
             </div>
+            <!-- Botón para crear nuevo pago -->
             <BotonPrimario
               variant="outline-light"
               icon="bi bi-plus-circle"
@@ -66,9 +75,10 @@
           </div>
         </div>
 
-        <!-- Filtros -->
+        <!-- ===== FILTROS DE BÚSQUEDA ===== -->
         <div class="filters-section mb-4">
           <div class="row g-3">
+            <!-- Filtro por estado -->
             <div class="col-md-3">
               <select class="form-select" v-model="filterStatus">
                 <option value="">Todos los estados</option>
@@ -78,9 +88,11 @@
                 <option value="Liquidado">Liquidado</option>
               </select>
             </div>
+            <!-- Filtro por fecha -->
             <div class="col-md-3">
               <input type="date" class="form-control" v-model="filterDate">
             </div>
+            <!-- Búsqueda de texto -->
             <div class="col-md-6">
               <input 
                 type="text" 
@@ -92,7 +104,7 @@
           </div>
         </div>
 
-        <!-- Tabla de Pagos -->
+        <!-- ===== TABLA DE PAGOS ===== -->
         <div class="payments-table-container">
           <table class="table table-hover align-middle">
             <thead class="table-light">
@@ -108,6 +120,7 @@
               </tr>
             </thead>
             <tbody>
+              <!-- Componente reutilizable para cada fila de pago -->
               <FilaPago
                 v-for="pago in pagosFiltrados"
                 :key="pago.id"
@@ -119,6 +132,7 @@
                 @edit="editPago"
                 @delete="deletePago"
               />
+              <!-- Estado vacío cuando no hay pagos -->
               <tr v-if="pagosFiltrados.length === 0">
                 <td colspan="8" class="text-center py-4 text-muted">
                   <div class="empty-state">
@@ -133,7 +147,9 @@
       </div>
     </div>
 
-    <!-- Modal Crear Pago (Sidebar) -->
+    <!-- ===== MODALES ===== -->
+    
+    <!-- Modal Sidebar para crear nuevo pago -->
     <CreatePaymentSidebar
       :show="showCreateModal"
       :selected-company="selectedEmpresa"
@@ -144,7 +160,7 @@
       @save="createPago"
     />
 
-    <!-- Modal Ver Detalles -->
+    <!-- Modal para ver detalles del pago -->
     <PaymentDetailModal
       v-if="showDetailModal"
       :show="showDetailModal"
@@ -154,7 +170,7 @@
       @edit="editPago"
     />
 
-    <!-- Modal Editar Pago -->
+    <!-- Modal para editar pago existente -->
     <PaymentEditModal
       v-if="showEditModal"
       :show="showEditModal"
@@ -166,7 +182,7 @@
       @save="updatePago"
     />
 
-    <!-- Modal Editar Empresa -->
+    <!-- Modal para editar empresa -->
     <CompanyEditModal
       v-if="showCompanyEditModal"
       :show="showCompanyEditModal"
@@ -175,7 +191,7 @@
       @save="updateCompany"
     />
 
-    <!-- Modal Acciones de Pago -->
+    <!-- Modal para acciones de pago (liquidar/abonar) -->
     <PaymentActionModal
       v-if="showActionModal"
       :show="showActionModal"
@@ -188,6 +204,7 @@
 </template>
 
 <script setup>
+// ===== IMPORTACIONES =====
 import { ref, computed } from 'vue'
 import BotonPrimario from '../../../../components/ui/BotonPrimario.vue'
 import EmpresaItem from '../../../../components/ui/EmpresaItem.vue'
@@ -201,24 +218,30 @@ import { useAlert } from '../../../../composables/useAlert'
 
 const { showSuccess, showError, showConfirm } = useAlert()
 
-// Estados reactivos
+// ===== ESTADO REACTIVO =====
+// Variables para controlar filtros y búsquedas
 const searchEmpresa = ref('')
 const searchTerm = ref('')
 const filterStatus = ref('')
 const filterDate = ref('')
 const selectedEmpresa = ref(null)
+
+// Variables para controlar modales
 const showCreateModal = ref(false)
 const showDetailModal = ref(false)
 const showEditModal = ref(false)
 const showCompanyEditModal = ref(false)
 const showActionModal = ref(false)
+
+// Variables para datos temporales
 const selectedPago = ref(null)
 const editingPago = ref(null)
 const editingCompany = ref(null)
 const actionPayment = ref(null)
 const currentAction = ref('')
 
-// Datos de empresas
+// ===== DATOS DE EMPRESAS =====
+// En una aplicación real, estos datos vendrían de una API
 const empresas = ref([
   {
     id: 1,
@@ -252,14 +275,13 @@ const empresas = ref([
   }
 ])
 
-// Datos de planes
+// ===== DATOS DE PLANES Y SERVICIOS =====
 const planes = ref([
   { id: 1, nombre: 'Plan Huevo', precio: 15000 },
   { id: 2, nombre: 'Plan Ajolote', precio: 25000 },
   { id: 3, nombre: 'Plan Alebrije', precio: 0 } // Personalizado
 ])
 
-// Datos de servicios
 const servicios = ref([
   { id: 1, nombre: 'Desarrollo de E-commerce', precio: 8000 },
   { id: 2, nombre: 'Email Marketing', precio: 5000 },
@@ -268,7 +290,7 @@ const servicios = ref([
   { id: 5, nombre: 'Automatización', precio: 8000 }
 ])
 
-// Datos de pagos
+// ===== DATOS DE PAGOS =====
 const pagos = ref([
   {
     id: 1,
@@ -308,7 +330,8 @@ const pagos = ref([
   }
 ])
 
-// Computed properties
+// ===== COMPUTED PROPERTIES =====
+// Filtrar empresas según búsqueda
 const empresasFiltradas = computed(() => {
   if (!searchEmpresa.value) return empresas.value
   return empresas.value.filter(empresa => 
@@ -317,6 +340,7 @@ const empresasFiltradas = computed(() => {
   )
 })
 
+// Filtrar pagos según múltiples criterios
 const pagosFiltrados = computed(() => {
   let filtered = pagos.value
 
@@ -347,7 +371,7 @@ const pagosFiltrados = computed(() => {
   return filtered
 })
 
-// Métodos para empresas
+// ===== MÉTODOS PARA EMPRESAS =====
 const selectEmpresa = (empresa) => {
   selectedEmpresa.value = empresa
 }
@@ -358,6 +382,7 @@ const editEmpresa = (empresa) => {
 }
 
 const deleteEmpresa = async (empresa) => {
+  // Mostrar confirmación antes de eliminar
   const confirmed = await showConfirm(
     'Eliminar Empresa',
     `¿Estás seguro de que deseas eliminar la empresa "${empresa.name}"? Esta acción no se puede deshacer.`
@@ -367,6 +392,7 @@ const deleteEmpresa = async (empresa) => {
     const index = empresas.value.findIndex(e => e.id === empresa.id)
     if (index > -1) {
       empresas.value.splice(index, 1)
+      // Limpiar selección si era la empresa eliminada
       if (selectedEmpresa.value?.id === empresa.id) {
         selectedEmpresa.value = null
       }
@@ -389,11 +415,13 @@ const updateCompany = (companyData) => {
   editingCompany.value = null
 }
 
-// Métodos para pagos
+// ===== MÉTODOS PARA PAGOS =====
+// Contar pagos por empresa
 const getPaymentsCount = (companyId) => {
   return pagos.value.filter(pago => pago.companyId === companyId).length
 }
 
+// Calcular total de pagos por empresa
 const getTotalAmount = (companyId) => {
   return pagos.value
     .filter(pago => pago.companyId === companyId)
@@ -426,6 +454,7 @@ const deletePago = async (pago) => {
   }
 }
 
+// ===== ACCIONES DE PAGO =====
 const handleLiquidar = (pago) => {
   actionPayment.value = pago
   currentAction.value = 'liquidar'
@@ -454,6 +483,7 @@ const handlePaymentAction = (actionData) => {
     }
   }
   
+  // Limpiar estado del modal
   showActionModal.value = false
   actionPayment.value = null
   currentAction.value = ''
@@ -462,7 +492,7 @@ const handlePaymentAction = (actionData) => {
 const createPago = (pagoData) => {
   const newPago = {
     ...pagoData,
-    id: Date.now()
+    id: Date.now() // Generar ID único temporal
   }
   pagos.value.push(newPago)
   showCreateModal.value = false
@@ -480,9 +510,11 @@ const updatePago = (pagoData) => {
 }
 </script>
 
+<!-- ===== ESTILOS ESPECÍFICOS DEL COMPONENTE ===== -->
 <style scoped>
+/* Layout principal con sidebar y contenido */
 .pagos-tab {
-  height: calc(100vh - 200px);
+  height: calc(100vh - 200px); /* Altura dinámica */
 }
 
 .pagos-layout {
@@ -491,6 +523,7 @@ const updatePago = (pagoData) => {
   gap: 1rem;
 }
 
+/* Sidebar de empresas */
 .empresas-sidebar {
   width: 350px;
   background: white;
@@ -513,9 +546,10 @@ const updatePago = (pagoData) => {
 
 .empresas-list {
   flex: 1;
-  overflow-y: auto;
+  overflow-y: auto; /* Scroll cuando hay muchas empresas */
 }
 
+/* Contenido principal */
 .pagos-content {
   flex: 1;
   background: white;
@@ -540,10 +574,11 @@ const updatePago = (pagoData) => {
 
 .payments-table-container {
   flex: 1;
-  overflow-y: auto;
+  overflow-y: auto; /* Scroll para la tabla */
   padding: 0 1.5rem 1.5rem;
 }
 
+/* Estilos de tabla */
 .table thead th {
   background: #f8f9fa;
   color: var(--primary-blue);
@@ -553,7 +588,7 @@ const updatePago = (pagoData) => {
   text-transform: uppercase;
   font-size: 0.875rem;
   letter-spacing: 0.5px;
-  position: sticky;
+  position: sticky; /* Header fijo al hacer scroll */
   top: 0;
   z-index: 10;
 }
@@ -568,15 +603,17 @@ const updatePago = (pagoData) => {
   padding: 2rem;
 }
 
+/* Estilos de formularios */
 .form-control:focus,
 .form-select:focus {
   border-color: var(--primary-coral);
   box-shadow: 0 0 0 0.25rem rgba(233, 79, 55, 0.25);
 }
 
+/* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 1200px) {
   .pagos-layout {
-    flex-direction: column;
+    flex-direction: column; /* Stack vertical en pantallas pequeñas */
     height: auto;
   }
   

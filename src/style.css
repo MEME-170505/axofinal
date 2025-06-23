@@ -1,19 +1,27 @@
+/* ===== VARIABLES CSS GLOBALES ===== */
+/* Definición de colores y valores reutilizables en toda la aplicación */
 :root {
-  --primary-beige: #F6F1E6;
-  --primary-coral: #e94f37;
-  --primary-blue: #1d3557;
-  --primary-white: #ffffff;
-  --primary-orange: #f9a26c;
-  --primary-purple: #8857e2;
-  --primary-light-blue: #0dcaf0;
-  --primary-yellow: #ffc107;
+  /* Paleta de colores principal */
+  --primary-beige: #F6F1E6;    /* Color de fondo principal */
+  --primary-coral: #e94f37;    /* Color principal de la marca */
+  --primary-blue: #1d3557;     /* Color secundario para textos */
+  --primary-white: #ffffff;    /* Blanco puro */
+  --primary-orange: #f9a26c;   /* Naranja complementario */
+  --primary-purple: #8857e2;   /* Púrpura para variaciones */
+  --primary-light-blue: #0dcaf0; /* Azul claro */
+  --primary-yellow: #ffc107;   /* Amarillo para alertas */
+  
+  /* Sombras predefinidas */
   --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.08);
   --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.12);
+  
+  /* Transición base para animaciones */
   --transition-base: all 0.3s ease;
 }
 
-/* Base Styles */
+/* ===== ESTILOS BASE ===== */
 body {
+  /* Fuente principal de la aplicación */
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -23,16 +31,17 @@ body {
   min-height: 100vh;
 }
 
+/* Estilos para encabezados */
 h1, h2, h3, h4, h5, h6 {
   line-height: 1.2;
   margin-bottom: 1rem;
 }
 
-/* Layout */
+/* ===== LAYOUT PRINCIPAL ===== */
 .app-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 100vh; /* Altura mínima de pantalla completa */
 }
 
 .container {
@@ -41,7 +50,7 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0 1rem;
 }
 
-/* Buttons */
+/* ===== BOTONES PERSONALIZADOS ===== */
 .btn-primary {
   background-color: var(--primary-coral);
   border-color: var(--primary-coral);
@@ -49,26 +58,27 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-primary:hover {
-  background-color: #d73c26;
+  background-color: #d73c26; /* Versión más oscura del coral */
   border-color: #d73c26;
-  transform: translateY(-2px);
+  transform: translateY(-2px); /* Efecto de elevación */
   box-shadow: 0 4px 15px rgba(233, 79, 55, 0.3);
 }
 
-/* Text Utilities */
+/* ===== CLASES UTILITARIAS ===== */
+/* Colores de texto */
 .text-coral { color: var(--primary-coral); }
 .text-blue { color: var(--primary-blue); }
 .text-white { color: var(--primary-white); }
 
-/* Background Utilities */
+/* Colores de fondo */
 .bg-beige { background-color: var(--primary-beige); }
 .bg-coral { background-color: var(--primary-coral); }
 .bg-blue { background-color: var(--primary-blue); }
 
-/* Form Styles */
+/* ===== FORMULARIOS ===== */
 .form-control,
 .form-select {
-  background-color: #fce7d2;
+  background-color: #fce7d2; /* Fondo ligeramente coloreado */
   border: 1px solid rgba(0, 0, 0, 0.1);
   transition: var(--transition-base);
 }
@@ -80,7 +90,8 @@ h1, h2, h3, h4, h5, h6 {
   background-color: #fce7d2;
 }
 
-/* Animations */
+/* ===== ANIMACIONES ===== */
+/* Transiciones de página */
 .page-enter-active,
 .page-leave-active {
   transition: opacity 0.3s ease;
@@ -91,14 +102,14 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 0;
 }
 
-/* Responsive Design */
+/* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
   .container {
     padding: 0 0.5rem;
   }
 }
 
-/* Utility Classes */
+/* ===== CLASES UTILITARIAS ADICIONALES ===== */
 .shadow-custom {
   box-shadow: var(--shadow-md);
 }
@@ -107,7 +118,7 @@ h1, h2, h3, h4, h5, h6 {
   transition: var(--transition-base);
 }
 
-/* Loading States */
+/* ===== ESTADOS DE CARGA ===== */
 .loading-spinner {
   display: inline-block;
   width: 20px;
@@ -123,7 +134,7 @@ h1, h2, h3, h4, h5, h6 {
   100% { transform: rotate(360deg); }
 }
 
-/* Scrollbar Styling */
+/* ===== PERSONALIZACIÓN DE SCROLLBAR ===== */
 ::-webkit-scrollbar {
   width: 8px;
 }
