@@ -208,4 +208,3 @@ watch(() => props.show, (newValue) => {
   font-weight: 600;
 }
 </style>
-</template>
