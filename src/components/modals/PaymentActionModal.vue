@@ -5,9 +5,8 @@
         <div class="modal-header border-0 pb-0">
           <h5 class="modal-title fw-bold">
             <i :class="[modalIcon, 'me-2']"></i>
-
+            {{ modalTitle }}
           </h5>
-          
           <button type="button" class="btn-close" @click="$emit('close')"></button>
         </div>
 
@@ -76,7 +75,7 @@
                 Cancelar
               </button>
               <button type="submit" class="btn" :class="submitButtonClass">
-                <i :class="submitButtonIcon" class="me-1"></i>
+                <i :class="[submitButtonIcon, 'me-1']"></i>
                 {{ submitButtonText }}
               </button>
             </div>
@@ -155,7 +154,6 @@ const handleSubmit = () => {
   emit('confirm', data)
 }
 
-// Reset form when modal opens
 watch(() => props.show, (newValue) => {
   if (newValue) {
     abonoAmount.value = 0
