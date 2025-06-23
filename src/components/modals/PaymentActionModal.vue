@@ -1,4 +1,4 @@
-<template>
+
   <div class="modal fade" :class="{ show: show }" tabindex="-1" style="display: block;" v-if="show">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content border-0 shadow">
