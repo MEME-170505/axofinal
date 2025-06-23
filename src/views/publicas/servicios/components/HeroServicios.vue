@@ -18,7 +18,7 @@
             </p>
             <div class="hero-stats">
               <div class="stat-item">
-                <span class="stat-number">500+</span>
+                <span class="stat-number">3+</span>
                 <span class="stat-label">Proyectos</span>
               </div>
               <div class="stat-item">
