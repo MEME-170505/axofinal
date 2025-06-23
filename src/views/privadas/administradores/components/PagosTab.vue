@@ -133,9 +133,8 @@
       </div>
     </div>
 
-    <!-- Modal Crear Pago -->
-    <CreatePaymentModal
-      v-if="showCreateModal"
+    <!-- Modal Crear Pago (Sidebar) -->
+    <CreatePaymentSidebar
       :show="showCreateModal"
       :selected-company="selectedEmpresa"
       :companies="empresas"
@@ -193,7 +192,7 @@ import { ref, computed } from 'vue'
 import BotonPrimario from '../../../../components/ui/BotonPrimario.vue'
 import EmpresaItem from '../../../../components/ui/EmpresaItem.vue'
 import FilaPago from '../../../../components/ui/FilaPago.vue'
-import CreatePaymentModal from '../../../../components/modals/CreatePaymentModal.vue'
+import CreatePaymentSidebar from '../../../../components/modals/CreatePaymentSidebar.vue'
 import PaymentDetailModal from '../../../../components/modals/PaymentDetailModal.vue'
 import PaymentEditModal from '../../../../components/modals/PaymentEditModal.vue'
 import CompanyEditModal from '../../../../components/modals/CompanyEditModal.vue'
