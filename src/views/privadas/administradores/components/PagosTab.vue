@@ -613,4 +613,3 @@ const updatePago = (pagoData) => {
   }
 }
 </style>
-</template>
