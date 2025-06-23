@@ -9,7 +9,7 @@
               <i class="bi bi-building me-2"></i>
               Empresas
             </h5>
-            <span class="badge bg-primary">{{ empresas.length }}</span>
+            <span class="badge bg-light text-dark">{{ empresas.length }}</span>
           </div>
         </div>
         
@@ -52,12 +52,12 @@
               <h4 class="mb-1">
                 <i class="bi bi-clock-history me-2"></i>
                 Historial de Pagos
-                <span v-if="selectedEmpresa" class="text-muted">- {{ selectedEmpresa.name }}</span>
+                <span v-if="selectedEmpresa" class="text-light opacity-75">- {{ selectedEmpresa.name }}</span>
               </h4>
-              <small class="text-muted">{{ pagosFiltrados.length }} registro(s)</small>
+              <small class="text-light opacity-75">{{ pagosFiltrados.length }} registro(s)</small>
             </div>
             <BotonPrimario
-              variant="primary"
+              variant="outline-light"
               icon="bi bi-plus-circle"
               @click="showCreateModal = true"
             >
@@ -113,6 +113,8 @@
                 :key="pago.id"
                 :pago="pago"
                 :show-delete="true"
+                @liquidar="handleLiquidar"
+                @abonar="handleAbonar"
                 @view="viewPago"
                 @edit="editPago"
                 @delete="deletePago"
@@ -173,6 +175,16 @@
       @close="showCompanyEditModal = false"
       @save="updateCompany"
     />
+
+    <!-- Modal Acciones de Pago -->
+    <PaymentActionModal
+      v-if="showActionModal"
+      :show="showActionModal"
+      :payment="actionPayment"
+      :action="currentAction"
+      @close="showActionModal = false"
+      @confirm="handlePaymentAction"
+    />
   </div>
 </template>
 
@@ -185,6 +197,7 @@ import CreatePaymentModal from '../../../../components/modals/CreatePaymentModal
 import PaymentDetailModal from '../../../../components/modals/PaymentDetailModal.vue'
 import PaymentEditModal from '../../../../components/modals/PaymentEditModal.vue'
 import CompanyEditModal from '../../../../components/modals/CompanyEditModal.vue'
+import PaymentActionModal from '../../../../components/modals/PaymentActionModal.vue'
 import { useAlert } from '../../../../composables/useAlert'
 
 const { showSuccess, showError, showConfirm } = useAlert()
@@ -199,9 +212,12 @@ const showCreateModal = ref(false)
 const showDetailModal = ref(false)
 const showEditModal = ref(false)
 const showCompanyEditModal = ref(false)
+const showActionModal = ref(false)
 const selectedPago = ref(null)
 const editingPago = ref(null)
 const editingCompany = ref(null)
+const actionPayment = ref(null)
+const currentAction = ref('')
 
 // Datos de empresas
 const empresas = ref([
@@ -272,7 +288,7 @@ const pagos = ref([
     userName: 'Ana López',
     companyId: 1,
     planName: 'Marketing Digital + Email Marketing',
-    amount: 21000,
+    amount: 13000,
     status: 'Pendiente',
     date: '2024-01-19',
     purchaseId: 'TXN987654321',
@@ -409,6 +425,39 @@ const deletePago = async (pago) => {
       showSuccess('Pago eliminado', 'El pago ha sido eliminado exitosamente')
     }
   }
+}
+
+const handleLiquidar = (pago) => {
+  actionPayment.value = pago
+  currentAction.value = 'liquidar'
+  showActionModal.value = true
+}
+
+const handleAbonar = (pago) => {
+  actionPayment.value = pago
+  currentAction.value = 'abonar'
+  showActionModal.value = true
+}
+
+const handlePaymentAction = (actionData) => {
+  const { action, payment, notes, abonoAmount } = actionData
+  const index = pagos.value.findIndex(p => p.id === payment.id)
+  
+  if (index > -1) {
+    if (action === 'liquidar') {
+      pagos.value[index].status = 'Liquidado'
+      pagos.value[index].notes = notes || 'Pago liquidado completamente'
+      showSuccess('Pago liquidado', 'El pago ha sido marcado como liquidado')
+    } else if (action === 'abonar') {
+      pagos.value[index].status = 'Abono'
+      pagos.value[index].notes = notes || `Abono registrado: $${abonoAmount.toLocaleString()}`
+      showSuccess('Abono registrado', `Se ha registrado un abono de $${abonoAmount.toLocaleString()}`)
+    }
+  }
+  
+  showActionModal.value = false
+  actionPayment.value = null
+  currentAction.value = ''
 }
 
 const createPago = (pagoData) => {
@@ -564,3 +613,4 @@ const updatePago = (pagoData) => {
   }
 }
 </style>
+</template>
