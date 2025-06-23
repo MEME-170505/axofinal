@@ -4,9 +4,10 @@
       <div class="modal-content border-0 shadow">
         <div class="modal-header border-0 pb-0">
           <h5 class="modal-title fw-bold">
-            <i :class="modalIcon" class="me-2"></i>
-            {{ modalTitle }}
+            <i :class="[modalIcon, 'me-2']"></i>
+
           </h5>
+          
           <button type="button" class="btn-close" @click="$emit('close')"></button>
         </div>
 
