@@ -1,43 +1,89 @@
-/* ===== VARIABLES CSS GLOBALES ===== */
-/* Definición de colores y valores reutilizables en toda la aplicación */
+/* ===== 🎨 VARIABLES CSS GLOBALES - IDENTIDAD VISUAL DE AXOWEB ===== */
+/* Estas variables definen la PERSONALIDAD VISUAL de toda la aplicación */
 :root {
-  /* Paleta de colores principal */
-  --primary-beige: #F6F1E6;    /* Color de fondo principal */
-  --primary-coral: #e94f37;    /* Color principal de la marca */
-  --primary-blue: #1d3557;     /* Color secundario para textos */
-  --primary-white: #ffffff;    /* Blanco puro */
-  --primary-orange: #f9a26c;   /* Naranja complementario */
-  --primary-purple: #8857e2;   /* Púrpura para variaciones */
-  --primary-light-blue: #0dcaf0; /* Azul claro */
-  --primary-yellow: #ffc107;   /* Amarillo para alertas */
+  /* 🌈 PALETA DE COLORES PRINCIPAL - Colores que definen la MARCA */
+  --primary-beige: #F6F1E6;      /* Fondo principal - CÁLIDO y acogedor */
+  --primary-coral: #e94f37;      /* Color principal - VIBRANTE y energético */
+  --primary-blue: #1d3557;       /* Color secundario - PROFESIONAL y confiable */
+  --primary-white: #ffffff;      /* Blanco puro - LIMPIEZA y claridad */
+  --primary-orange: #f9a26c;     /* Naranja complementario - CREATIVIDAD */
+  --primary-purple: #8857e2;     /* Púrpura - INNOVACIÓN y tecnología */
+  --primary-light-blue: #0dcaf0; /* Azul claro - FRESCURA */
+  --primary-yellow: #ffc107;     /* Amarillo - ATENCIÓN y alertas */
   
-  /* Sombras predefinidas */
-  --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.12);
+  /* 🌟 SOMBRAS PREDEFINIDAS - Profundidad y elegancia */
+  --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.08);   /* Sombra sutil */
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.12);   /* Sombra media */
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);  /* Sombra pronunciada */
   
-  /* Transición base para animaciones */
+  /* ⚡ TRANSICIÓN BASE - Suavidad en todas las animaciones */
   --transition-base: all 0.3s ease;
+  
+  /* 📏 SISTEMA DE ESPACIADO - Consistencia visual */
+  --spacing-xs: 0.25rem;  /* 4px */
+  --spacing-sm: 0.5rem;   /* 8px */
+  --spacing-md: 1rem;     /* 16px */
+  --spacing-lg: 1.5rem;   /* 24px */
+  --spacing-xl: 2rem;     /* 32px */
+  
+  /* 🔤 TIPOGRAFÍA - Jerarquía de texto */
+  --font-size-xs: 0.75rem;   /* 12px */
+  --font-size-sm: 0.875rem;  /* 14px */
+  --font-size-md: 1rem;      /* 16px */
+  --font-size-lg: 1.125rem;  /* 18px */
+  --font-size-xl: 1.25rem;   /* 20px */
+  
+  /* 📐 BORDER RADIUS - Consistencia en bordes */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 50%;
 }
 
-/* ===== ESTILOS BASE ===== */
+/* ===== 🏗️ ESTILOS BASE FUNDAMENTALES ===== */
+* {
+  box-sizing: border-box; /* CRUCIAL para cálculos de tamaño consistentes */
+}
+
 body {
-  /* Fuente principal de la aplicación */
+  /* 🔤 Fuente principal - Stack de fuentes PROFESIONAL */
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+  line-height: 1.5; /* Espaciado de línea ÓPTIMO para legibilidad */
   font-weight: 400;
   background-color: var(--primary-beige);
   color: var(--primary-blue);
   margin: 0;
-  min-height: 100vh;
+  min-height: 100vh; /* Altura mínima de pantalla completa */
+  
+  /* 🎯 Optimizaciones de renderizado */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
-/* Estilos para encabezados */
+/* 📝 Estilos para encabezados - Jerarquía visual CLARA */
 h1, h2, h3, h4, h5, h6 {
-  line-height: 1.2;
+  line-height: 1.2; /* Espaciado COMPACTO para títulos */
   margin-bottom: 1rem;
+  font-weight: 700; /* Peso BOLD para impacto visual */
+  color: var(--primary-blue);
 }
 
-/* ===== LAYOUT PRINCIPAL ===== */
+h1 { font-size: 2.5rem; }   /* 40px - Títulos PRINCIPALES */
+h2 { font-size: 2rem; }     /* 32px - Títulos de sección */
+h3 { font-size: 1.75rem; }  /* 28px - Subtítulos */
+h4 { font-size: 1.5rem; }   /* 24px - Títulos menores */
+h5 { font-size: 1.25rem; }  /* 20px - Títulos pequeños */
+h6 { font-size: 1rem; }     /* 16px - Títulos mínimos */
+
+/* 📄 Párrafos optimizados */
+p {
+  margin-bottom: 1rem;
+  line-height: 1.6; /* Espaciado ÓPTIMO para lectura */
+}
+
+/* ===== 🏗️ LAYOUT PRINCIPAL - Estructura de la aplicación ===== */
 .app-container {
   display: flex;
   flex-direction: column;
@@ -45,80 +91,151 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1200px; /* Ancho máximo para LEGIBILIDAD óptima */
   margin: 0 auto;
   padding: 0 1rem;
 }
 
-/* ===== BOTONES PERSONALIZADOS ===== */
-.btn-primary {
-  background-color: var(--primary-coral);
-  border-color: var(--primary-coral);
+/* ===== 🎯 BOTONES PERSONALIZADOS - Elementos de acción ===== */
+.btn {
+  border-radius: var(--radius-md); /* Bordes consistentes */
+  font-weight: 600; /* Texto BOLD para mejor visibilidad */
   transition: var(--transition-base);
+  border: 2px solid transparent; /* Espacio para bordes en hover */
+  position: relative;
+  overflow: hidden; /* Para efectos de animación */
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-coral) 0%, #d73c26 100%);
+  border-color: var(--primary-coral);
+  color: white;
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-primary:hover {
-  background-color: #d73c26; /* Versión más oscura del coral */
+  background: linear-gradient(135deg, #d73c26 0%, #c23321 100%);
   border-color: #d73c26;
-  transform: translateY(-2px); /* Efecto de elevación */
-  box-shadow: 0 4px 15px rgba(233, 79, 55, 0.3);
+  transform: translateY(-2px); /* Efecto de ELEVACIÓN */
+  box-shadow: var(--shadow-md);
+  color: white;
 }
 
-/* ===== CLASES UTILITARIAS ===== */
-/* Colores de texto */
-.text-coral { color: var(--primary-coral); }
-.text-blue { color: var(--primary-blue); }
-.text-white { color: var(--primary-white); }
+.btn-primary:active {
+  transform: translateY(0); /* Efecto de PRESIÓN */
+  box-shadow: var(--shadow-sm);
+}
 
-/* Colores de fondo */
-.bg-beige { background-color: var(--primary-beige); }
-.bg-coral { background-color: var(--primary-coral); }
-.bg-blue { background-color: var(--primary-blue); }
+/* 🔘 Botones secundarios */
+.btn-secondary {
+  background-color: var(--primary-blue);
+  border-color: var(--primary-blue);
+  color: white;
+}
 
-/* ===== FORMULARIOS ===== */
+.btn-secondary:hover {
+  background-color: #2a4a6b;
+  border-color: #2a4a6b;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ⚠️ Botones de advertencia */
+.btn-warning {
+  background: linear-gradient(135deg, var(--primary-yellow) 0%, #fd7e14 100%);
+  border-color: var(--primary-yellow);
+  color: #212529;
+}
+
+/* ✅ Botones de éxito */
+.btn-success {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  border-color: #28a745;
+  color: white;
+}
+
+/* ❌ Botones de peligro */
+.btn-danger {
+  background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%);
+  border-color: #dc3545;
+  color: white;
+}
+
+/* ===== 📝 FORMULARIOS MEJORADOS ===== */
 .form-control,
 .form-select {
   background-color: #fce7d2; /* Fondo ligeramente coloreado */
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem; /* Padding GENEROSO para mejor UX */
   transition: var(--transition-base);
+  font-weight: 500;
 }
 
 .form-control:focus,
 .form-select:focus {
   border-color: var(--primary-coral);
   box-shadow: 0 0 0 0.25rem rgba(233, 79, 55, 0.25);
-  background-color: #fce7d2;
+  background-color: white;
+  outline: none; /* Remover outline por defecto */
 }
 
-/* ===== ANIMACIONES ===== */
-/* Transiciones de página */
+.form-control:hover,
+.form-select:hover {
+  border-color: rgba(233, 79, 55, 0.5);
+}
+
+/* 🏷️ Labels mejorados */
+.form-label {
+  font-weight: 600;
+  color: var(--primary-blue);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* ===== 🎨 CLASES UTILITARIAS - Herramientas rápidas ===== */
+/* 🌈 Colores de texto */
+.text-coral { color: var(--primary-coral) !important; }
+.text-blue { color: var(--primary-blue) !important; }
+.text-white { color: var(--primary-white) !important; }
+.text-orange { color: var(--primary-orange) !important; }
+.text-purple { color: var(--primary-purple) !important; }
+
+/* 🎨 Colores de fondo */
+.bg-beige { background-color: var(--primary-beige) !important; }
+.bg-coral { background-color: var(--primary-coral) !important; }
+.bg-blue { background-color: var(--primary-blue) !important; }
+.bg-white { background-color: var(--primary-white) !important; }
+
+/* 🌟 Sombras */
+.shadow-custom { box-shadow: var(--shadow-md); }
+.shadow-custom-lg { box-shadow: var(--shadow-lg); }
+
+/* ⚡ Transiciones */
+.transition-custom { transition: var(--transition-base); }
+
+/* 📐 Bordes redondeados */
+.rounded-custom { border-radius: var(--radius-md); }
+.rounded-custom-lg { border-radius: var(--radius-lg); }
+
+/* ===== 🎭 ANIMACIONES Y TRANSICIONES ===== */
+/* 📄 Transiciones de página */
 .page-enter-active,
 .page-leave-active {
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.page-enter-from,
+.page-enter-from {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
 .page-leave-to {
   opacity: 0;
+  transform: translateX(-20px);
 }
 
-/* ===== RESPONSIVE DESIGN ===== */
-@media (max-width: 768px) {
-  .container {
-    padding: 0 0.5rem;
-  }
-}
-
-/* ===== CLASES UTILITARIAS ADICIONALES ===== */
-.shadow-custom {
-  box-shadow: var(--shadow-md);
-}
-
-.transition-custom {
-  transition: var(--transition-base);
-}
-
-/* ===== ESTADOS DE CARGA ===== */
+/* 🔄 Estados de carga */
 .loading-spinner {
   display: inline-block;
   width: 20px;
@@ -134,20 +251,165 @@ h1, h2, h3, h4, h5, h6 {
   100% { transform: rotate(360deg); }
 }
 
-/* ===== PERSONALIZACIÓN DE SCROLLBAR ===== */
+/* 💫 Animación de pulso */
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* 🌊 Animación de flotación */
+.float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+/* ===== 📱 RESPONSIVE DESIGN INTELIGENTE ===== */
+/* 💻 Tablets y pantallas medianas */
+@media (max-width: 992px) {
+  .container {
+    padding: 0 0.75rem;
+  }
+  
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.75rem; }
+  h3 { font-size: 1.5rem; }
+}
+
+/* 📱 Móviles */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 0.5rem;
+  }
+  
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.5rem; }
+  h3 { font-size: 1.25rem; }
+  
+  .btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* 📱 Móviles pequeños */
+@media (max-width: 576px) {
+  .container {
+    padding: 0 0.25rem;
+  }
+  
+  .btn {
+    width: 100%; /* Botones de ancho completo en móviles */
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* ===== 🎨 PERSONALIZACIÓN DE SCROLLBAR ===== */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
+  border-radius: var(--radius-sm);
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--primary-coral);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
+  transition: var(--transition-base);
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #d73c26;
 }
+
+/* ===== 🎯 ESTADOS DE FOCUS MEJORADOS ===== */
+/* Mejor accesibilidad para navegación por teclado */
+*:focus {
+  outline: 2px solid var(--primary-coral);
+  outline-offset: 2px;
+}
+
+.btn:focus,
+.form-control:focus,
+.form-select:focus {
+  outline: none; /* Usar box-shadow en su lugar */
+}
+
+/* ===== 🌙 SOPORTE PARA MODO OSCURO ===== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-beige: #1a1a1a;
+    --primary-blue: #e8e8e8;
+  }
+  
+  body {
+    background-color: var(--primary-beige);
+    color: var(--primary-blue);
+  }
+}
+
+/* ===== 🎨 EFECTOS ESPECIALES ===== */
+/* Efecto de cristal (glassmorphism) */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Gradiente de texto */
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary-coral) 0%, var(--primary-purple) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== 🚀 OPTIMIZACIONES DE RENDIMIENTO ===== */
+/* Optimizar animaciones para mejor rendimiento */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+/* Usar GPU para animaciones suaves */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* ===== 📝 NOTAS IMPORTANTES ===== */
+/*
+🎯 FILOSOFÍA DE DISEÑO:
+- Consistencia visual en TODA la aplicación
+- Accesibilidad como PRIORIDAD
+- Rendimiento optimizado
+- Responsive design INTELIGENTE
+- Animaciones SUTILES pero efectivas
+
+🔧 MANTENIMIENTO:
+- Usar SIEMPRE las variables CSS definidas
+- NO hardcodear colores o medidas
+- Mantener la jerarquía de especificidad
+- Documentar cambios importantes
+
+🚀 RENDIMIENTO:
+- Minimizar repaints y reflows
+- Usar transform y opacity para animaciones
+- Optimizar para dispositivos móviles
+- Lazy loading donde sea posible
+*/

@@ -1,121 +1,135 @@
-// ===== ARCHIVO PRINCIPAL DE LA APLICACIÓN =====
-// Este archivo es el punto de entrada de toda la aplicación Vue.js
+// ===== 🚀 NÚCLEO CENTRAL DE LA APLICACIÓN VUE.JS =====
+// Este archivo es el CORAZÓN de toda la aplicación - aquí se inicializa TODO
+// Sin este archivo, la aplicación simplemente NO EXISTE
 
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 
-// ===== IMPORTACIÓN DE ESTILOS =====
-// Bootstrap para componentes UI y diseño responsivo
+// ===== 🎨 IMPORTACIÓN DE ESTILOS CRÍTICOS =====
+// Bootstrap: Framework CSS que da VIDA visual a todos los componentes
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
-// Animate.css para animaciones predefinidas
+// Animate.css: Biblioteca de animaciones que hace que la UI sea ESPECTACULAR
 import 'animate.css'
-// Estilos personalizados de la aplicación
+// Estilos personalizados: La IDENTIDAD VISUAL única de AxoWeb
 import './style.css'
 
-// ===== IMPORTACIÓN DE VISTAS PÚBLICAS =====
-// Páginas que cualquier usuario puede ver sin autenticación
+// ===== 🌐 IMPORTACIÓN DE VISTAS PÚBLICAS =====
+// Estas son las páginas que CUALQUIER PERSONA puede ver sin restricciones
 import Home from './views/publicas/inicio/InicioView.vue'
 import Services from './views/publicas/servicios/ServiciosView.vue'
 import About from './views/publicas/sobre-nosotros/SobreNosotrosView.vue'
 import Contact from './views/publicas/contactanos/ContactanosView.vue'
 
-// ===== VISTAS DE SERVICIOS ESPECÍFICOS =====
-// Páginas detalladas de cada servicio individual
+// ===== 🛠️ VISTAS DE SERVICIOS ESPECÍFICOS =====
+// Páginas ESPECIALIZADAS para cada servicio individual que ofrece AxoWeb
 import DesarrolloWebView from './views/publicas/servicios/detalle/DesarrolloWebView.vue'
 import EmailMarketingView from './views/publicas/servicios/detalle/EmailMarketingView.vue'
 import DisenoUIUXView from './views/publicas/servicios/detalle/DisenoUIUXView.vue'
 import MarketingDigitalView from './views/publicas/servicios/detalle/MarketingDigitalView.vue'
 import AutomatizacionView from './views/publicas/servicios/detalle/AutomatizacionView.vue'
 
-// ===== VISTAS PRIVADAS (REQUIEREN AUTENTICACIÓN) =====
+// ===== 🔐 VISTAS PRIVADAS - ACCESO RESTRINGIDO =====
+// Estas vistas requieren AUTENTICACIÓN y ROLES específicos
 import Cliente from './views/privadas/clientes/ClienteView.vue'
 import Dashboard from './views/privadas/administradores/AdminView.vue'
 
-// ===== VISTAS ESPECIALES =====
+// ===== 🎯 VISTAS ESPECIALES Y DE ERROR =====
 import Ecommerce from './views/ofertas/Ecommerce.vue'
 import Marketing from './views/ofertas/Marketing.vue'
 import Error404 from './views/Error404.vue'
 import PaymentSuccess from './views/PaymentSuccess.vue'
 
-// ===== CONFIGURACIÓN INICIAL =====
-// Crear la aplicación Vue y el store de estado global
+// ===== ⚡ CONFIGURACIÓN INICIAL CRÍTICA =====
+// ORDEN IMPORTANTE: Pinia DEBE configurarse ANTES de importar stores
 const app = createApp(App)
 const pinia = createPinia()
-
-// IMPORTANTE: Pinia debe configurarse ANTES de importar stores
-app.use(pinia)
+app.use(pinia) // ¡ESTO ES CRUCIAL! Sin esto, los stores NO funcionan
 
 // Importar el store de autenticación DESPUÉS de configurar Pinia
 import { useAuthStore } from './stores/auth'
 
-// ===== CONFIGURACIÓN DE RUTAS =====
+// ===== 🗺️ CONFIGURACIÓN COMPLETA DE RUTAS =====
+// Este es el MAPA de navegación de toda la aplicación
 const routes = [
-  // RUTAS PÚBLICAS - Accesibles sin autenticación
+  // 🌍 RUTAS PÚBLICAS - Acceso LIBRE para todos los usuarios
   { path: '/', component: Home },
   { path: '/servicios', component: Services },
   { path: '/sobre-nosotros', component: About },
   { path: '/contactanos', component: Contact },
   
-  // RUTAS DE SERVICIOS ESPECÍFICOS
+  // 🛠️ RUTAS DE SERVICIOS ESPECÍFICOS - Páginas de detalle
   { path: '/servicios/desarrollo-web', component: DesarrolloWebView },
   { path: '/servicios/email-marketing', component: EmailMarketingView },
   { path: '/servicios/diseno-ui-ux', component: DisenoUIUXView },
   { path: '/servicios/marketing-digital', component: MarketingDigitalView },
   { path: '/servicios/automatizacion', component: AutomatizacionView },
   
-  // RUTAS PRIVADAS - Requieren autenticación y rol específico
+  // 🔐 RUTAS PRIVADAS - ACCESO RESTRINGIDO POR ROL
   { 
     path: '/cliente', 
     component: Cliente,
-    meta: { requiresAuth: true, role: 'client' } // Solo clientes autenticados
+    meta: { 
+      requiresAuth: true,    // ¡REQUIERE estar logueado!
+      role: 'client'         // ¡SOLO para clientes!
+    }
   },
   { 
     path: '/admin', 
     component: Dashboard,
-    meta: { requiresAuth: true, role: 'admin' } // Solo administradores
+    meta: { 
+      requiresAuth: true,    // ¡REQUIERE estar logueado!
+      role: 'admin'          // ¡SOLO para administradores!
+    }
   },
   
-  // RUTAS DE OFERTAS ESPECIALES
+  // 🎯 RUTAS DE OFERTAS ESPECIALES
   { path: '/ecommerce', component: Ecommerce },
   { path: '/marketing-digital', component: Marketing },
   { path: '/pago-exitoso', component: PaymentSuccess },
   
-  // MANEJO DE ERRORES
+  // 🚨 MANEJO DE ERRORES - Rutas no encontradas
   { path: '/404', component: Error404 },
-  { path: '/:pathMatch(.*)*', redirect: '/404' } // Cualquier ruta no encontrada
+  { path: '/:pathMatch(.*)*', redirect: '/404' } // Captura CUALQUIER ruta inválida
 ]
 
-// ===== CREAR ROUTER =====
+// ===== 🚦 CREAR ROUTER CON CONFIGURACIÓN AVANZADA =====
 const router = createRouter({
-  history: createWebHistory(), // Usar URLs limpias (sin #)
+  history: createWebHistory(), // URLs limpias sin # (modo historia)
   routes,
-  scrollBehavior: () => ({ top: 0 }) // Siempre ir al top al cambiar de página
+  scrollBehavior: () => ({ top: 0 }) // SIEMPRE ir al top al cambiar página
 })
 
-// ===== GUARDIA DE NAVEGACIÓN =====
-// Controla el acceso a rutas protegidas
+// ===== 🛡️ GUARDIA DE NAVEGACIÓN - SEGURIDAD MÁXIMA =====
+// Esta función se ejecuta ANTES de cada cambio de ruta
+// Es el GUARDIÁN que protege las rutas privadas
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore() 
 
-  // Si la ruta requiere autenticación
+  // 🔍 Verificar si la ruta requiere autenticación
   if (to.meta.requiresAuth) {
-    // Verificar si el usuario está autenticado
+    // ❌ Si NO está autenticado, RECHAZAR acceso
     if (!authStore.isAuthenticated) {
-      return next('/') // Redirigir al inicio si no está autenticado
+      console.warn('🚫 Acceso DENEGADO: Usuario no autenticado')
+      return next('/') // Redirigir al inicio
     }
 
-    // Verificar si tiene el rol correcto
+    // 🔍 Verificar si tiene el ROL correcto
     if (to.meta.role && authStore.user.role !== to.meta.role) {
+      console.warn(`🚫 Acceso DENEGADO: Rol requerido: ${to.meta.role}, Rol actual: ${authStore.user.role}`)
       return next('/') // Redirigir si no tiene el rol adecuado
     }
   }
 
-  next() // Permitir navegación
+  // ✅ Todo OK, permitir navegación
+  next()
 })
 
-// ===== MONTAR LA APLICACIÓN =====
+// ===== 🚀 MONTAJE FINAL DE LA APLICACIÓN =====
+// Este es el momento donde la aplicación COBRA VIDA
 app.use(router)
-app.mount('#app')
+app.mount('#app') // Conectar con el elemento HTML #app
+
+console.log('🎉 AxoWeb Digital - Aplicación iniciada exitosamente!')
